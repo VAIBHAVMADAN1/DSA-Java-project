@@ -13,7 +13,7 @@ public class OSMParser {
         extractAndSaveLocations(inputFile, outputFile);
     }
 
-    // Extract nodes and buildings and save them
+    // Step 1: Extract nodes and buildings and save them
     public static void extractAndSaveLocations(File input, File output) throws Exception {
         DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = db.parse(input);

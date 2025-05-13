@@ -312,7 +312,34 @@ public class EventManager {
     }
 
     private static void manageParticipants() {
-        System.out.println("Functionality yet to be implemented");
+        System.out.println("Enter comma-separated roll numbers of participants:");
+        String input = scanner.nextLine();
+        String[] rollNumbers = input.split(",");
+
+        List<String> validRollNumbers = new ArrayList<>();
+        List<String> invalidRollNumbers = new ArrayList<>();
+
+        for (String rollNumber : rollNumbers) {
+            rollNumber = rollNumber.trim();
+            if (studentMap.containsKey(rollNumber)) {
+                validRollNumbers.add(rollNumber);
+            } else {
+                invalidRollNumbers.add(rollNumber);
+            }
+        }
+
+        System.out.println("\nValid Participants:");
+        for (String rollNumber : validRollNumbers) {
+            Student student = studentMap.get(rollNumber);
+            System.out.println("Roll Number: " + rollNumber + ", Name: " + student.firstName + " " + student.lastName);
+        }
+
+        if (!invalidRollNumbers.isEmpty()) {
+            System.out.println("\nInvalid Roll Numbers:");
+            for (String rollNumber : invalidRollNumbers) {
+                System.out.println(rollNumber);
+            }
+        }
     }
 
 }
