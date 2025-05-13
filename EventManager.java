@@ -9,8 +9,11 @@ public class EventManager {
     private static final String STUDENTS_FILE = "students.csv";
     private static final String EVENTS_FILE = "events.csv";
 
+    private static List<String> buildings = new ArrayList<>();
+
     public static void main(String[] args) {
         ensureEventsFileExists();
+        loadBuildings();
         loadStudents();
 
         boolean running = true;
@@ -39,14 +42,13 @@ public class EventManager {
         System.out.print("Event Name: ");
         String name = scanner.nextLine();
 
-        System.out.print("Event Building: ");
-        String building = scanner.nextLine();
+        String building = chooseBuilding();
 
         System.out.print("Event Room: ");
         String room = scanner.nextLine();
 
-        LocalDate date = getDateInput("Event Date (YYYY-MM-DD)");
-        LocalTime time = getTimeInput("Event Start Time (HH:MM)");
+        LocalDate date = getDateInput("Event Date (YYYY-MM-DD) ");
+        LocalTime time = getTimeInput("Event Start Time (HH:MM) ");
 
         System.out.print("Organiser: ");
         String organiser = scanner.nextLine();
@@ -96,8 +98,7 @@ public class EventManager {
                     System.out.print("New Event Name (" + data[0] + "): ");
                     String name = inputOrDefault(data[0]);
 
-                    System.out.print("New Building (" + data[1] + "): ");
-                    String building = inputOrDefault(data[1]);
+                    String building = chooseBuilding();
 
                     System.out.print("New Room (" + data[2] + "): ");
                     String room = inputOrDefault(data[2]);
@@ -278,7 +279,40 @@ public class EventManager {
         }
     }
 
-    private static void manageParticipants() {
-        System.out.println("Participant management is not supported with file-based storage.");
+    private static void loadBuildings() {
+        try (BufferedReader br = new BufferedReader(new FileReader("locations.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\t");
+                buildings.add(parts[0]); // Add building name
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading buildings: " + e.getMessage());
+        }
     }
+
+    private static String chooseBuilding() {
+        if (buildings.isEmpty()) {
+            System.out.println("No buildings available.");
+            return "Unknown";
+        }
+
+        System.out.println("Choose a building:");
+        for (int i = 0; i < buildings.size(); i++) {
+            System.out.println((i + 1) + ". " + buildings.get(i));
+        }
+
+        int choice = getIntInput("Enter the number corresponding to the building: ");
+        while (choice < 1 || choice > buildings.size()) {
+            System.out.print("Invalid choice. Try again: ");
+            choice = getIntInput("Enter the number corresponding to the building: ");
+        }
+
+        return buildings.get(choice - 1);
+    }
+
+    private static void manageParticipants() {
+        System.out.println("Functionality yet to be implemented");
+    }
+
 }
